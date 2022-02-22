@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
-var prog = 0.0;
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -37,7 +35,7 @@ class Teams extends StatelessWidget {
   Teams({Key? key}) : super(key: key);
 
   //TODO: Lag från fil vid senare tillfälle
-  final List<String> tms = <String>['Mölndal IBF', 'Pixbo Wallenstam', 'Hovslätt IK', 'Jönköpings IK', 'Barnarps IF'];
+  final List<String> teams = <String>['Mölndal IBF', 'Pixbo Wallenstam', 'Hovslätt IK', 'Jönköpings IK', 'Barnarps IF', 'Guldhedens IK'];
 
   @override
   Widget build(BuildContext context) {
@@ -47,14 +45,14 @@ class Teams extends StatelessWidget {
         //TODO: Gör knappar av containersarna
         shrinkWrap: true,
         padding: const EdgeInsets.all(8),
-        itemCount: tms.length,
+        itemCount: teams.length,
         itemBuilder: (BuildContext context, int index) {
           return Container(
             height: 50,
             color: Colors.black,
             child: Center(
                 child: Text(
-                  tms[index],
+                  teams[index],
                   style: const TextStyle(fontSize: 20, color: Colors.white),
               ),
             ),
