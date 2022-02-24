@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
       title: 'Innebandy',
       theme: ThemeData(
       ),
-      home: Players(),
+      home: Teams(),
     );
   }
 }
