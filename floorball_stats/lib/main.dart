@@ -3,21 +3,29 @@ import 'package:flutter/material.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Innebandy',
       theme: ThemeData(
       ),
-      home: Teams(),
+      home: Players(),
     );
   }
 }
 
-class Teams extends StatelessWidget {
+class Teams extends StatefulWidget {
   Teams({Key? key}) : super(key: key);
 
+  @override
+  State<Teams> createState() => _TeamsState();
+}
+
+class _TeamsState extends State<Teams> {
   final List<String> teams = <String>['Mölndal IBF', 'Pixbo Wallenstam', 'Hovslätt IK', 'Jönköpings IK', 'Barnarps IF', 'Guldhedens IK', 'IK Zenith', 'Burås IK', 'Kärra IBK', 'Stenugnsunds IBK', 'FBC Vinga', 'IBF Backadalen'];
+
   TextStyle textStyle = const TextStyle(fontSize: 20, color: Colors.white);
 
   @override
@@ -38,10 +46,16 @@ class Teams extends StatelessWidget {
 }
 
 
-class Games extends StatelessWidget {
+class Games extends StatefulWidget {
   Games({Key? key}) : super(key: key);
 
+  @override
+  State<Games> createState() => _GamesState();
+}
+
+class _GamesState extends State<Games> {
   List<String> games = <String>['Pixbo Wallenstam', 'Hovslätt IK', 'Jönköpings IK', 'Barnarps IF', 'Guldhedens IK', 'IK Zenith', 'Burås IK', 'Kärra IBK', 'Stenugnsunds IBK', 'FBC Vinga', 'IBF Backadalen'];
+
   TextStyle textStyle = const TextStyle(fontSize: 15, color: Colors.lightBlueAccent);
 
   @override
@@ -61,10 +75,16 @@ class Games extends StatelessWidget {
   }
 }
 
-class Players extends StatelessWidget {
+class Players extends StatefulWidget {
   Players({Key? key}) : super(key: key);
 
+  @override
+  State<Players> createState() => _PlayersState();
+}
+
+class _PlayersState extends State<Players> {
   List<String> players = <String>['Ruben Frilund', 'Ludvig Lindahl', 'Oliver Ljung', 'Anton Levinsson', 'Amanda Levinsson', 'Masoud Shaker', 'Wilma Einarsson', '', '', '', '', '', '', '', '', '', '', '',];
+
   TextStyle textStyle = const TextStyle(fontSize: 25, color: Colors.green);
 
   @override
