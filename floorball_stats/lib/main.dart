@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'testStats.dart';
 
 void main(){
-  print(teams);
+  testStats();
   runApp(MyApp());
 }
 
@@ -19,9 +19,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
-
 
 
 class Teams extends StatefulWidget {
@@ -55,8 +52,8 @@ class _TeamsState extends State<Teams> {
 
 
 class Games extends StatefulWidget{
-  final String team;
-  Games({Key? key, required this.team}) : super(key: key);
+  final List<Games> games;
+  Games({Key? key, required this.games}) : super(key: key);
 
   @override
   State<Games> createState() => _GamesState();
@@ -76,7 +73,7 @@ class _GamesState extends State<Games> {
         body: Column(
             children: [
               Flexible(
-                  child: ScrollItems(items: teams,textStyle: textStyle)
+                  child: ScrollItems(items: games,textStyle: textStyle)
               )
             ]
         )
@@ -138,7 +135,7 @@ class Stats extends StatelessWidget {
 
 
 class ScrollItems extends StatelessWidget {
-  final Map<String,List<String>> items;
+  final List<Scroll> items;
   final TextStyle textStyle;
   const ScrollItems({Key? key, required this.items, required this.textStyle}) : super(key: key);
 
@@ -147,13 +144,12 @@ class ScrollItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List keys = items.keys.toList();
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       child: ListView.separated(
         shrinkWrap: true,
         padding: const EdgeInsets.all(8),
-        itemCount: keys.length,
+        itemCount: items.length,
         itemBuilder: (BuildContext context, int index) {
           return MaterialButton(
             height: 50,
@@ -161,12 +157,12 @@ class ScrollItems extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MyApp()),
+                  MaterialPageRoute(builder: (context) => Games(games: items[index].name)),
               );
             },
             child: Center(
                 child: Text(
-                  keys[index],
+                  items[index].name,
                   style: textStyle,
               ),
             ),
@@ -177,3 +173,5 @@ class ScrollItems extends StatelessWidget {
     );
   }
 }
+
+
