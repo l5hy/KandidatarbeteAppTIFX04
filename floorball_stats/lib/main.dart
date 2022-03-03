@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'testStats.dart';
 
 void main(){
-  print(teams);
+  testStats();
   runApp(MyApp());
 }
 
@@ -15,24 +15,21 @@ class MyApp extends StatelessWidget {
       title: 'Innebandy',
       theme: ThemeData(
       ),
-      home: Teams(),
+      home: TeamPage(),
     );
   }
 }
 
 
+class TeamPage extends StatefulWidget {
 
-
-
-class Teams extends StatefulWidget {
-
-  Teams({Key? key}) : super(key: key);
+  TeamPage({Key? key}) : super(key: key);
 
   @override
-  State<Teams> createState() => _TeamsState();
+  State<TeamPage> createState() => _TeamPageState();
 }
 
-class _TeamsState extends State<Teams> {
+class _TeamPageState extends State<TeamPage> {
 
   TextStyle textStyle = const TextStyle(fontSize: 20, color: Colors.white);
 
@@ -45,7 +42,7 @@ class _TeamsState extends State<Teams> {
         body: Column(
           children: [
             Flexible(
-                child: ScrollItems(items: teams, textStyle: textStyle)
+                child: ScrollTeam(items: teams, textStyle: textStyle)
             )
           ]
         )
@@ -54,17 +51,16 @@ class _TeamsState extends State<Teams> {
 }
 
 
-class Games extends StatefulWidget{
+class GamePage extends StatefulWidget{
+  final List<Game> games;
   final String team;
-  Games({Key? key, required this.team}) : super(key: key);
+  GamePage({Key? key, required this.games, required this.team}) : super(key: key);
 
   @override
-  State<Games> createState() => _GamesState();
+  State<GamePage> createState() => _GamePageState();
 }
 
-class _GamesState extends State<Games> {
-  List<String> games = <String>['Pixbo Wallenstam', 'Hovslätt IK', 'Jönköpings IK', 'Barnarps IF', 'Guldhedens IK', 'IK Zenith', 'Burås IK', 'Kärra IBK', 'Stenugnsunds IBK', 'FBC Vinga', 'IBF Backadalen'];
-
+class _GamePageState extends State<GamePage> {
   TextStyle textStyle = const TextStyle(fontSize: 15, color: Colors.lightBlueAccent);
 
   @override
@@ -76,7 +72,7 @@ class _GamesState extends State<Games> {
         body: Column(
             children: [
               Flexible(
-                  child: ScrollItems(items: teams,textStyle: textStyle)
+                  child: ScrollGame(items: widget.games,textStyle: textStyle)
               )
             ]
         )
@@ -84,16 +80,16 @@ class _GamesState extends State<Games> {
   }
 }
 
-class Players extends StatefulWidget {
-
-  Players({Key? key}) : super(key: key);
+class PlayerPage extends StatefulWidget {
+  List<Player> players;
+  String game;
+  PlayerPage({Key? key, required this.players, required this.game}) : super(key: key);
 
   @override
-  State<Players> createState() => _PlayersState();
+  State<PlayerPage> createState() => _PlayerPageState();
 }
 
-class _PlayersState extends State<Players> {
-  List<String> players = <String>['Ruben Frilund', 'Ludvig Lindahl', 'Oliver Ljung', 'Anton Levinsson', 'Amanda Levinsson', 'Masoud Shaker', 'Wilma Einarsson', '', '', '', '', '', '', '', '', '', '', '',];
+class _PlayerPageState extends State<PlayerPage> {
 
   TextStyle textStyle = const TextStyle(fontSize: 25, color: Colors.green);
 
@@ -101,12 +97,12 @@ class _PlayersState extends State<Players> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Spelare"),
+          title: Text("Spelare i matchen mot ${widget.game}"),
         ),
         body: Column(
             children: [
               Flexible(
-                  child: ScrollItems(items: teams, textStyle: textStyle)
+                  child: ScrollPlayer(items: widget.players, textStyle: textStyle)
               )
             ]
         )
@@ -115,19 +111,19 @@ class _PlayersState extends State<Players> {
 }
 
 
-class Stats extends StatelessWidget {
-  final String player;
-  const Stats({Key? key, required this.player}) : super(key: key);
+class StatsPage extends StatelessWidget {
+  final Player player;
+  const StatsPage({Key? key, required this.player}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Statistik för $player"),
+          title: Text("Statistik för spelare ${player.number}"),
         ),
         body: Column(
-            children: const [
-
+            children: [
+              Flexible(child: Stats(player: player))
             ],
         )
     );
@@ -137,23 +133,22 @@ class Stats extends StatelessWidget {
 
 
 
-class ScrollItems extends StatelessWidget {
-  final Map<String,List<String>> items;
+class ScrollTeam extends StatelessWidget {
+  final List<Team> items;
   final TextStyle textStyle;
-  const ScrollItems({Key? key, required this.items, required this.textStyle}) : super(key: key);
+  const ScrollTeam({Key? key, required this.items, required this.textStyle}) : super(key: key);
 
 
   //TODO: Lag från fil vid senare tillfälle
 
   @override
   Widget build(BuildContext context) {
-    List keys = items.keys.toList();
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       child: ListView.separated(
         shrinkWrap: true,
         padding: const EdgeInsets.all(8),
-        itemCount: keys.length,
+        itemCount: items.length,
         itemBuilder: (BuildContext context, int index) {
           return MaterialButton(
             height: 50,
@@ -161,12 +156,12 @@ class ScrollItems extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MyApp()),
+                  MaterialPageRoute(builder: (context) => GamePage(games: items[index].games, team: items[index].name)),
               );
             },
             child: Center(
                 child: Text(
-                  keys[index],
+                  items[index].name,
                   style: textStyle,
               ),
             ),
@@ -177,3 +172,95 @@ class ScrollItems extends StatelessWidget {
     );
   }
 }
+
+class ScrollGame extends StatelessWidget {
+  final List<Game> items;
+  final TextStyle textStyle;
+  const ScrollGame({Key? key, required this.items, required this.textStyle}) : super(key: key);
+
+
+  //TODO: Lag från fil vid senare tillfälle
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height,
+      child: ListView.separated(
+        shrinkWrap: true,
+        padding: const EdgeInsets.all(8),
+        itemCount: items.length,
+        itemBuilder: (BuildContext context, int index) {
+          return MaterialButton(
+            height: 50,
+            color: Colors.black,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PlayerPage(players: items[index].players, game: items[index].name)),
+              );
+            },
+            child: Center(
+              child: Text(
+                items[index].name,
+                style: textStyle,
+              ),
+            ),
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) => const Divider(),
+      ),
+    );
+  }
+}
+class ScrollPlayer extends StatelessWidget {
+  final List<Player> items;
+  final TextStyle textStyle;
+  const ScrollPlayer({Key? key, required this.items, required this.textStyle}) : super(key: key);
+
+
+  //TODO: Lag från fil vid senare tillfälle
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height,
+      child: ListView.separated(
+        shrinkWrap: true,
+        padding: const EdgeInsets.all(8),
+        itemCount: items.length,
+        itemBuilder: (BuildContext context, int index) {
+          return MaterialButton(
+            height: 50,
+            color: Colors.black,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => StatsPage(player: items[index])),
+              );
+            },
+            child: Center(
+              child: Text(
+                "Spelare ${items[index].number.toString()}",
+                style: textStyle,
+              ),
+            ),
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) => const Divider(),
+      ),
+    );
+  }
+}
+
+class Stats extends StatelessWidget {
+  final Player player;
+  const Stats({Key? key, required this.player}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text("Distans ${player.distance} meter");
+    //Text("Distans ${player.distance} meter")
+  }
+}
+
+
