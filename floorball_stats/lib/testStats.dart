@@ -7,13 +7,13 @@ void testStats() {
   List<Player> players = [Player(0, 0)];
 
 
-  List<Game> games = [Game("opponent", players)];
+  List<Game> games = [Game("Motståndare", players)];
 
   for(int i = 0; i < 3; i++){
-    String team = "team " + i.toString();
+    String team = "Lag " + i.toString();
     teams.add(Team(team));
     for(int j = 0; j < 3; j++){
-      String game = "opponent" + j.toString();
+      String game = "Motståndare " + j.toString();
       Player player = Player(j, 0);
       teams[i].addGame(Game(game,[player]));
     }
@@ -23,13 +23,8 @@ void testStats() {
   }
 }
 
-class Scroll {
-  late String name;
-}
-
-class Team extends Scroll{
+class Team{
   List<Game> games = [];
-  @override
   late String name;
 
   Team(this.name, [games]): games = games ?? [];
@@ -40,9 +35,8 @@ class Team extends Scroll{
 }
 
 
-class Game implements Scroll{
+class Game{
   late List<Player> players;
-  @override
   late String name;
 
   Game(this.name, [players]) : players = players ?? [];
@@ -52,18 +46,10 @@ class Game implements Scroll{
   }
 }
 
-class Player implements Scroll{
-
-  @override
-  late String name;
-
+class Player{
   late int number;
   late int distance;
 
-  Player(int number, int distance) {
-    this.number = number;
-    this.distance = distance;
-    name = "Player " + number.toString();
-  }
+  Player(this.number, this.distance);
 
 }
