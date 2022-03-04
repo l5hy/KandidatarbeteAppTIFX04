@@ -6,7 +6,6 @@ void testStats() {
 
   List<Player> players = [Player(0, 0)];
 
-
   List<Game> games = [Game("Motståndare", players)];
 
   for(int i = 0; i < 3; i++){
@@ -51,5 +50,4 @@ class Player{
   late int distance;
 
   Player(this.number, this.distance);
-
 }
