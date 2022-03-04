@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'testStats.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main(){
   testStats();
@@ -62,6 +63,7 @@ class GamePage extends StatefulWidget{
 
 class _GamePageState extends State<GamePage> {
   TextStyle textStyle = const TextStyle(fontSize: 15, color: Colors.lightBlueAccent);
+
 
   @override
   Widget build(BuildContext context) {
@@ -258,7 +260,39 @@ class Stats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text("Distans ${player.distance} meter");
+    double boxSize = MediaQuery.of(context).size.width/2;
+    return Column(
+      children: [
+        Row(
+          children: [
+            Container(
+              height: boxSize,
+              width: boxSize,
+              child: Center(
+                  child: Image(
+                    image: const AssetImage('Assets/silhouette2.png'),
+                    height: boxSize/1.4,
+                  ),
+              ),
+            ),
+            Container(
+              height: boxSize,
+              width: boxSize,
+              child: Center(
+                  child: Text(
+                    player.number.toString(),
+                    style: GoogleFonts.bebasNeue(textStyle: TextStyle(fontSize: boxSize/1.2))
+                  )
+              ),
+            )
+          ],
+        ),
+        Text("Distans ${player.distance} meter"),
+        Text("Distans ${player.distance} meter")
+      ],
+    );
+
+    //Text("Distans ${player.distance} meter");
     //Text("Distans ${player.distance} meter")
   }
 }
