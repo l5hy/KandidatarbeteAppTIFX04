@@ -62,7 +62,7 @@ class GamePage extends StatefulWidget{
 }
 
 class _GamePageState extends State<GamePage> {
-  TextStyle textStyle = const TextStyle(fontSize: 15, color: Colors.lightBlueAccent);
+  TextStyle textStyle = const TextStyle(fontSize: 20, color: Colors.white);
 
 
   @override
@@ -93,7 +93,7 @@ class PlayerPage extends StatefulWidget {
 
 class _PlayerPageState extends State<PlayerPage> {
 
-  TextStyle textStyle = const TextStyle(fontSize: 25, color: Colors.green);
+  TextStyle textStyle = const TextStyle(fontSize: 20, color: Colors.white);
 
   @override
   Widget build(BuildContext context) {
@@ -121,27 +121,22 @@ class StatsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Statistik för spelare ${player.number}"),
+          //title: Text("Statistik för spelare ${player.number}"),
         ),
         body: Column(
-            children: [
-              Flexible(child: Stats(player: player))
-            ],
+          children: [
+            Flexible(child: Stats(player: player))
+          ]
         )
     );
   }
 }
 
 
-
-
 class ScrollTeam extends StatelessWidget {
   final List<Team> items;
   final TextStyle textStyle;
   const ScrollTeam({Key? key, required this.items, required this.textStyle}) : super(key: key);
-
-
-  //TODO: Lag från fil vid senare tillfälle
 
   @override
   Widget build(BuildContext context) {
@@ -152,19 +147,21 @@ class ScrollTeam extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         itemCount: items.length,
         itemBuilder: (BuildContext context, int index) {
-          return MaterialButton(
-            height: 50,
-            color: Colors.black,
+          return ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size(20, MediaQuery.of(context).size.height/10),
+              maximumSize: Size(50, MediaQuery.of(context).size.height/10),
+            ),
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => GamePage(games: items[index].games, team: items[index].name)),
+                context,
+                MaterialPageRoute(builder: (context) => GamePage(games: items[index].games, team: items[index].name)),
               );
             },
             child: Center(
-                child: Text(
-                  items[index].name,
-                  style: textStyle,
+              child: Text(
+                items[index].name,
+                style: textStyle,
               ),
             ),
           );
@@ -180,9 +177,6 @@ class ScrollGame extends StatelessWidget {
   final TextStyle textStyle;
   const ScrollGame({Key? key, required this.items, required this.textStyle}) : super(key: key);
 
-
-  //TODO: Lag från fil vid senare tillfälle
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -192,9 +186,11 @@ class ScrollGame extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         itemCount: items.length,
         itemBuilder: (BuildContext context, int index) {
-          return MaterialButton(
-            height: 50,
-            color: Colors.black,
+          return ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size(20, MediaQuery.of(context).size.height/10),
+              maximumSize: Size(50, MediaQuery.of(context).size.height/10),
+            ),
             onPressed: () {
               Navigator.push(
                 context,
@@ -219,9 +215,6 @@ class ScrollPlayer extends StatelessWidget {
   final TextStyle textStyle;
   const ScrollPlayer({Key? key, required this.items, required this.textStyle}) : super(key: key);
 
-
-  //TODO: Lag från fil vid senare tillfälle
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -231,9 +224,11 @@ class ScrollPlayer extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         itemCount: items.length,
         itemBuilder: (BuildContext context, int index) {
-          return MaterialButton(
-            height: 50,
-            color: Colors.black,
+          return ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size(20, MediaQuery.of(context).size.height/10),
+              maximumSize: Size(50, MediaQuery.of(context).size.height/10),
+            ),
             onPressed: () {
               Navigator.push(
                 context,
@@ -242,8 +237,8 @@ class ScrollPlayer extends StatelessWidget {
             },
             child: Center(
               child: Text(
-                "Spelare ${items[index].number.toString()}",
-                style: textStyle,
+                items[index].number.toString(),
+                style: GoogleFonts.bebasNeue(textStyle: textStyle),
               ),
             ),
           );
@@ -260,40 +255,52 @@ class Stats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double boxSize = MediaQuery.of(context).size.width/2;
-    return Column(
-      children: [
-        Row(
-          children: [
-            Container(
-              height: boxSize,
-              width: boxSize,
-              child: Center(
+    double pad = 8;
+    double boxSize = MediaQuery.of(context).size.width/2-pad;
+    return SizedBox(
+      child: ListView(
+        padding: EdgeInsets.all(pad),
+        children: <Widget>[
+          Row(
+            children: [
+              SizedBox(
+                height: boxSize,
+                width: boxSize,
+                child: Center(
                   child: Image(
                     image: const AssetImage('Assets/silhouette2.png'),
                     height: boxSize/1.4,
                   ),
+                ),
               ),
-            ),
-            Container(
-              height: boxSize,
-              width: boxSize,
-              child: Center(
+              SizedBox(
+                height: boxSize,
+                width: boxSize,
+                child: Center(
                   child: Text(
                     player.number.toString(),
                     style: GoogleFonts.bebasNeue(textStyle: TextStyle(fontSize: boxSize/1.2))
                   )
+                ),
+              ),
+            ],
+          ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.green,
+            ),
+            height: boxSize/4,
+            width: boxSize*2,
+            child: Center(
+              child: Text(
+                "Distans ${player.distance} meter"
               ),
             )
-          ],
-        ),
-        Text("Distans ${player.distance} meter"),
-        Text("Distans ${player.distance} meter")
-      ],
+          )
+        ],
+      )
     );
-
-    //Text("Distans ${player.distance} meter");
-    //Text("Distans ${player.distance} meter")
   }
 }
 
