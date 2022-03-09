@@ -1,5 +1,8 @@
 
 
+//TODO: Lag från fil vid senare tillfälle
+
+
 List<Team> teams = [];
 
 void testStats() {
@@ -16,9 +19,6 @@ void testStats() {
       Player player = Player(j, 0);
       teams[i].addGame(Game(game,[player]));
     }
-  }
-  for(int i = 0; i < 3; i++){
-    print(teams[i].games[i].players[0].number);
   }
 }
 
