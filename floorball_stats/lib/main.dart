@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'testStats.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -93,8 +94,6 @@ class PlayerPage extends StatefulWidget {
 
 class _PlayerPageState extends State<PlayerPage> {
 
-  TextStyle textStyle = const TextStyle(fontSize: 20, color: Colors.white);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,7 +103,7 @@ class _PlayerPageState extends State<PlayerPage> {
         body: Column(
             children: [
               Flexible(
-                  child: ScrollPlayer(items: widget.players, textStyle: textStyle)
+                  child: ScrollPlayer(items: widget.players)
               )
             ]
         )
@@ -149,8 +148,8 @@ class ScrollTeam extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
-              minimumSize: Size(20, MediaQuery.of(context).size.height/10),
-              maximumSize: Size(50, MediaQuery.of(context).size.height/10),
+              minimumSize: const Size(20, 20),
+              maximumSize: const Size(50, 50),
             ),
             onPressed: () {
               Navigator.push(
@@ -188,8 +187,8 @@ class ScrollGame extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
-              minimumSize: Size(20, MediaQuery.of(context).size.height/10),
-              maximumSize: Size(50, MediaQuery.of(context).size.height/10),
+              minimumSize: const Size(20, 20),
+              maximumSize: const Size(50, 50),
             ),
             onPressed: () {
               Navigator.push(
@@ -212,22 +211,26 @@ class ScrollGame extends StatelessWidget {
 }
 class ScrollPlayer extends StatelessWidget {
   final List<Player> items;
-  final TextStyle textStyle;
-  const ScrollPlayer({Key? key, required this.items, required this.textStyle}) : super(key: key);
+  const ScrollPlayer({Key? key, required this.items}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
-      child: ListView.separated(
+      child: GridView.builder(
         shrinkWrap: true,
         padding: const EdgeInsets.all(8),
         itemCount: items.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: MediaQuery.of(context).size.width~/150,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+        ),
         itemBuilder: (BuildContext context, int index) {
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
-              minimumSize: Size(20, MediaQuery.of(context).size.height/10),
-              maximumSize: Size(50, MediaQuery.of(context).size.height/10),
+              minimumSize: const Size(20, 20),
+              //maximumSize: const Size(50, 50),
             ),
             onPressed: () {
               Navigator.push(
@@ -236,14 +239,40 @@ class ScrollPlayer extends StatelessWidget {
               );
             },
             child: Center(
-              child: Text(
-                items[index].number.toString(),
-                style: GoogleFonts.bebasNeue(textStyle: textStyle),
-              ),
+
+              child: Stack(
+                children: [
+                  SizedBox(
+                    // TODO: if size of page increased when here the picture goes yeeeet
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    child: Center(
+                      child: Image(
+                        image: AssetImage('Assets/silhouette2.png'),
+                        height: MediaQuery.of(context).size.height,
+                      ),
+                    ),
+                  ),
+                  Center(
+                    // TODO: the numbers is not positioning as we would want, fix!
+                    child: Container(
+                      alignment: Alignment.bottomCenter,
+                      padding: EdgeInsets.all(MediaQuery.of(context).size.height/60),
+                      child: Text(
+                        items[index].number.toString(),
+                        style: GoogleFonts.bebasNeue(textStyle: TextStyle(
+                            fontSize: (MediaQuery.of(context).size.width+MediaQuery.of(context).size.height)/50,
+                            color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              )
+
             ),
           );
         },
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
       ),
     );
   }
@@ -268,7 +297,7 @@ class Stats extends StatelessWidget {
                 width: boxSize,
                 child: Center(
                   child: Image(
-                    image: const AssetImage('Assets/silhouette2.png'),
+                    image: AssetImage('Assets/silhouette2.png'),
                     height: boxSize/1.4,
                   ),
                 ),

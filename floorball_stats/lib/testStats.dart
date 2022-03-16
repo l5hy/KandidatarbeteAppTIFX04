@@ -8,16 +8,16 @@ List<Team> teams = [];
 void testStats() {
 
   List<Player> players = [Player(0, 0)];
+  for(int i = 1; i < 50; i++){
+    players.add(Player(i, i));
+  }
 
-  List<Game> games = [Game("Motståndare", players)];
-
-  for(int i = 0; i < 3; i++){
+  for(int i = 0; i < 20; i++){
     String team = "Lag " + i.toString();
     teams.add(Team(team));
-    for(int j = 0; j < 3; j++){
+    for(int j = 0; j < 20; j++){
       String game = "Motståndare " + j.toString();
-      Player player = Player(j, 0);
-      teams[i].addGame(Game(game,[player]));
+      teams[i].addGame(Game(game,players));
     }
   }
 }
