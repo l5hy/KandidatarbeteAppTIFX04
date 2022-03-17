@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'testStats.dart';
@@ -242,31 +243,36 @@ class ScrollPlayer extends StatelessWidget {
 
               child: Stack(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     // TODO: if size of page increased when here the picture goes yeeeet
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
+                    //height: MediaQuery.of(context).size.height,
+                    //width: MediaQuery.of(context).size.width,
                     child: Center(
                       child: Image(
                         image: AssetImage('Assets/silhouette2.png'),
-                        height: MediaQuery.of(context).size.height,
+                        //height: MediaQuery.of(context).size.height,
                       ),
                     ),
                   ),
                   Center(
-                    // TODO: the numbers is not positioning as we would want, fix!
-                    child: Container(
-                      alignment: Alignment.bottomCenter,
-                      padding: EdgeInsets.all(MediaQuery.of(context).size.height/60),
-                      child: Text(
-                        items[index].number.toString(),
-                        style: GoogleFonts.bebasNeue(textStyle: TextStyle(
-                            fontSize: (MediaQuery.of(context).size.width+MediaQuery.of(context).size.height)/50,
-                            color: Colors.white),
-                        ),
-                      ),
+                    child: LayoutBuilder(
+                      builder: (BuildContext context, BoxConstraints constraints) {
+                        return Container(
+                          alignment: Alignment.bottomCenter,
+                          padding: EdgeInsets.all(constraints.maxWidth/10),
+                          child: Text(
+                            items[index].number.toString(),
+                            style: GoogleFonts.bebasNeue(
+                              textStyle: TextStyle(
+                                fontSize: (constraints.maxWidth)/3,
+                                color: Colors.white
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  )
+                  ),
                 ],
               )
 
@@ -280,15 +286,36 @@ class ScrollPlayer extends StatelessWidget {
 
 class Stats extends StatelessWidget {
   final Player player;
-  const Stats({Key? key, required this.player}) : super(key: key);
+  Stats({Key? key, required this.player}) : super(key: key);
+
+  final BoxDecoration boxDec = BoxDecoration(
+    borderRadius: BorderRadius.circular(8),
+    color: Colors.green,
+  );
+
 
   @override
   Widget build(BuildContext context) {
-    double pad = 8;
-    double boxSize = MediaQuery.of(context).size.width/2-pad;
+    final int shiftMin = player.shiftTime~/60;
+    final int shiftSec = player.shiftTime-shiftMin*60;
+    final int avShift = player.shiftTime~/player.shifts;
+    String averageShift;
+    if(avShift>60){
+      int min = avShift~/60;
+      int sec = avShift-min*60;
+      if(sec<10){
+        averageShift = "$min:0$sec";
+      }else{
+        averageShift = "$min:$sec";
+      }
+    } else{
+      averageShift = "$avShift sekunder";
+    }
+    const double pad = 8;
+    final double boxSize = MediaQuery.of(context).size.width/2-pad;
     return SizedBox(
       child: ListView(
-        padding: EdgeInsets.all(pad),
+        padding: const EdgeInsets.all(pad),
         children: <Widget>[
           Row(
             children: [
@@ -297,7 +324,7 @@ class Stats extends StatelessWidget {
                 width: boxSize,
                 child: Center(
                   child: Image(
-                    image: AssetImage('Assets/silhouette2.png'),
+                    image: const AssetImage('Assets/silhouette2.png'),
                     height: boxSize/1.4,
                   ),
                 ),
@@ -315,20 +342,50 @@ class Stats extends StatelessWidget {
             ],
           ),
           Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: Colors.green,
-            ),
+            decoration: boxDec,
             height: boxSize/4,
             width: boxSize*2,
             child: Center(
               child: Text(
-                "Distans ${player.distance} meter"
+                "Distans ${player.distance} meter",
               ),
-            )
-          )
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            decoration: boxDec,
+            height: boxSize/4,
+            width: boxSize*2,
+            child: Center(
+              child: Text(
+                "Total bytestid $shiftMin:$shiftSec",
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            decoration: boxDec,
+            height: boxSize/4,
+            width: boxSize*2,
+            child: Center(
+              child: Text(
+                "Genomsnittlig bytestid $averageShift",
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            decoration: boxDec,
+            height: boxSize/4,
+            width: boxSize*2,
+            child: Center(
+              child: Text(
+                "Antal byten ${player.shifts}",
+              ),
+            ),
+          ),
         ],
-      )
+      ),
     );
   }
 }
