@@ -10,7 +10,7 @@ void testStats() {
 
   List<Player> players = [Player(0, 0, 0, 0)];
   for(int i = 1; i < 100; i++){
-    players.add(Player(i, i, 15*i, i)); //number, distance, total shifttime and number of shifts (15 will be the average shifttime in this case)
+    players.add(Player(i, i, 60*i, i)); //number, distance, total shifttime and number of shifts (15 will be the average shifttime in this case)
   }
 
   for(int i = 0; i < 100; i++){

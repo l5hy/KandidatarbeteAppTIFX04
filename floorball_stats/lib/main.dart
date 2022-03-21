@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'testStats.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:math';
 
 void main(){
   testStats();
@@ -223,7 +224,7 @@ class ScrollPlayer extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         itemCount: items.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: MediaQuery.of(context).size.width~/150,
+          crossAxisCount: [MediaQuery.of(context).size.width~/150,1].reduce(max),
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
         ),
@@ -243,16 +244,20 @@ class ScrollPlayer extends StatelessWidget {
 
               child: Stack(
                 children: [
-                  const SizedBox(
-                    // TODO: if size of page increased when here the picture goes yeeeet
-                    //height: MediaQuery.of(context).size.height,
-                    //width: MediaQuery.of(context).size.width,
-                    child: Center(
-                      child: Image(
-                        image: AssetImage('Assets/silhouette2.png'),
-                        //height: MediaQuery.of(context).size.height,
-                      ),
-                    ),
+                  LayoutBuilder(
+                      builder: (BuildContext context, BoxConstraints constraints) {
+                        return SizedBox(
+                          // TODO: if size of page increased when here the picture goes yeeeet
+                          height: constraints.maxHeight,
+                          width: constraints.maxWidth,
+                          child: const Center(
+                            child: Image(
+                              image: AssetImage('Assets/silhouette2.png'),
+                              //height: constraints.maxWidth,
+                            ),
+                          ),
+                        );
+                      }
                   ),
                   Center(
                     child: LayoutBuilder(
@@ -300,10 +305,20 @@ class Stats extends StatelessWidget {
     final int shiftSec = player.shiftTime-shiftMin*60;
     final int avShift = player.shiftTime~/player.shifts;
     String averageShift;
-    if(avShift>60){
+    String totalShift;
+    if(shiftMin < 1){
+      totalShift = "$shiftSec sekunder";
+    } else{
+      if(shiftSec < 10){
+        totalShift = "$shiftMin:0$shiftSec";
+      } else{
+        totalShift = "$shiftMin:$shiftSec";
+      }
+    }
+    if(avShift>=60){
       int min = avShift~/60;
       int sec = avShift-min*60;
-      if(sec<10){
+      if(sec < 10){
         averageShift = "$min:0$sec";
       }else{
         averageShift = "$min:$sec";
@@ -316,6 +331,7 @@ class Stats extends StatelessWidget {
     return SizedBox(
       child: ListView(
         padding: const EdgeInsets.all(pad),
+        shrinkWrap: true,
         children: <Widget>[
           Row(
             children: [
@@ -358,7 +374,7 @@ class Stats extends StatelessWidget {
             width: boxSize*2,
             child: Center(
               child: Text(
-                "Total bytestid $shiftMin:$shiftSec",
+                "Total bytestid $totalShift",
               ),
             ),
           ),
