@@ -5,6 +5,7 @@ import 'testStats.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:math';
 
+
 void main(){
   testStats();
   runApp(MyApp());
@@ -18,6 +19,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Innebandy',
       theme: ThemeData(
+        scaffoldBackgroundColor: Colors.grey[700],
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.red,
+          //backgroundColor: Colors.blue,
+          //primary: Colors.red,
+          //surface: Colors.blue,
+        ),
       ),
       home: TeamPage(),
     );
@@ -35,13 +43,13 @@ class TeamPage extends StatefulWidget {
 
 class _TeamPageState extends State<TeamPage> {
 
-  TextStyle textStyle = const TextStyle(fontSize: 20, color: Colors.white);
+  TextStyle textStyle = const TextStyle(fontSize: 20, color: Colors.black);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Lag"),
+          title: const Text("Lag", style: TextStyle(color: Colors.black),),
         ),
         body: Column(
           children: [
@@ -65,14 +73,17 @@ class GamePage extends StatefulWidget{
 }
 
 class _GamePageState extends State<GamePage> {
-  TextStyle textStyle = const TextStyle(fontSize: 20, color: Colors.white);
+  TextStyle textStyle = const TextStyle(fontSize: 20, color: Colors.black);
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Matcher för ${widget.team}"),
+          title: Text("Matcher för ${widget.team}", style: TextStyle(color: Colors.black),),
+          iconTheme: const IconThemeData(
+            color: Colors.black, //change your color here
+          ),
         ),
         body: Column(
             children: [
@@ -100,7 +111,10 @@ class _PlayerPageState extends State<PlayerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Spelare i matchen mot ${widget.game}"),
+          title: Text("Spelare i matchen mot ${widget.game}", style: TextStyle(color: Colors.black),),
+          iconTheme: const IconThemeData(
+            color: Colors.black, //change your color here
+          ),
         ),
         body: Column(
             children: [
@@ -122,7 +136,9 @@ class StatsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          //title: Text("Statistik för spelare ${player.number}"),
+          iconTheme: const IconThemeData(
+            color: Colors.black, //change your color here
+          ),
         ),
         body: Column(
           children: [
@@ -143,10 +159,16 @@ class ScrollTeam extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
-      child: ListView.separated(
+      child: GridView.builder(
         shrinkWrap: true,
         padding: const EdgeInsets.all(8),
         itemCount: items.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: [MediaQuery.of(context).size.width~/400,1].reduce(max),
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          childAspectRatio: (7/1),
+        ),
         itemBuilder: (BuildContext context, int index) {
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -159,15 +181,31 @@ class ScrollTeam extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => GamePage(games: items[index].games, team: items[index].name)),
               );
             },
-            child: Center(
-              child: Text(
-                items[index].name,
-                style: textStyle,
-              ),
-            ),
+            child: Row(
+              children: [
+                const Image(
+                  image: AssetImage('Assets/silhouette2.png'),
+                  height: 25,
+                ),
+                const Image(
+                  image: AssetImage('Assets/silhouette2.png'),
+                  height: 35,
+                ),
+                const Image(
+                  image: AssetImage('Assets/silhouette2.png'),
+                  height: 25,
+                ),
+                Container(width: 20),
+                Flexible(
+                  child: Text(
+                    items[index].name,
+                    style: textStyle,
+                  ),
+                ),
+              ],
+            )
           );
         },
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
       ),
     );
   }
@@ -182,10 +220,16 @@ class ScrollGame extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
-      child: ListView.separated(
+      child: GridView.builder(
         shrinkWrap: true,
         padding: const EdgeInsets.all(8),
         itemCount: items.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: [MediaQuery.of(context).size.width~/400,1].reduce(max),
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          childAspectRatio: (7/1),
+        ),
         itemBuilder: (BuildContext context, int index) {
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -198,15 +242,31 @@ class ScrollGame extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => PlayerPage(players: items[index].players, game: items[index].name)),
               );
             },
-            child: Center(
-              child: Text(
-                items[index].name,
-                style: textStyle,
-              ),
-            ),
+            child: Row(
+              children: [
+                const Image(
+                  image: AssetImage('Assets/silhouette2.png'),
+                  height: 25,
+                ),
+                const Image(
+                  image: AssetImage('Assets/silhouette2.png'),
+                  height: 35,
+                ),
+                const Image(
+                  image: AssetImage('Assets/silhouette2.png'),
+                  height: 25,
+                ),
+                Container(width: 20),
+                Flexible(
+                  child: Text(
+                    items[index].name,
+                    style: textStyle,
+                  ),
+                ),
+              ],
+            )
           );
         },
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
       ),
     );
   }
@@ -241,7 +301,6 @@ class ScrollPlayer extends StatelessWidget {
               );
             },
             child: Center(
-
               child: Stack(
                 children: [
                   LayoutBuilder(
@@ -295,7 +354,7 @@ class Stats extends StatelessWidget {
 
   final BoxDecoration boxDec = BoxDecoration(
     borderRadius: BorderRadius.circular(8),
-    color: Colors.green,
+    color: Colors.red,
   );
 
 
@@ -362,8 +421,13 @@ class Stats extends StatelessWidget {
             height: boxSize/4,
             width: boxSize*2,
             child: Center(
-              child: Text(
-                "Distans ${player.distance} meter",
+              child: Flexible(
+                child: Text(
+                  "Distans ${player.distance} meter",
+                   style: TextStyle(
+                     fontSize: boxSize/10,
+                  ),
+                ),
               ),
             ),
           ),
@@ -373,8 +437,13 @@ class Stats extends StatelessWidget {
             height: boxSize/4,
             width: boxSize*2,
             child: Center(
-              child: Text(
-                "Total bytestid $totalShift",
+              child: Flexible(
+                child: Text(
+                  "Total bytestid $totalShift",
+                  style: TextStyle(
+                    fontSize: boxSize/10
+                  ),
+                ),
               ),
             ),
           ),
@@ -384,8 +453,13 @@ class Stats extends StatelessWidget {
             height: boxSize/4,
             width: boxSize*2,
             child: Center(
-              child: Text(
-                "Genomsnittlig bytestid $averageShift",
+              child: Flexible(
+                child: Text(
+                  "Genomsnittlig bytestid $averageShift",
+                  style: TextStyle(
+                    fontSize: boxSize/10
+                  ),
+                ),
               ),
             ),
           ),
@@ -395,8 +469,13 @@ class Stats extends StatelessWidget {
             height: boxSize/4,
             width: boxSize*2,
             child: Center(
-              child: Text(
-                "Antal byten ${player.shifts}",
+              child: Flexible(
+                child: Text(
+                  "Antal byten ${player.shifts}",
+                  style: TextStyle(
+                    fontSize: boxSize/10
+                  ),
+                ),
               ),
             ),
           ),

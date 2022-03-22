@@ -8,19 +8,21 @@ List<Team> teams = [];
 
 void testStats() {
 
-  List<Player> players = [Player(0, 0, 0, 0)];
+  List<Player> players = [Player(0, 0, 0, 1)];
   for(int i = 1; i < 100; i++){
     players.add(Player(i, i, 60*i, i)); //number, distance, total shifttime and number of shifts (15 will be the average shifttime in this case)
   }
 
-  for(int i = 0; i < 100; i++){
+  for(int i = 0; i < 90; i++){
     String team = "Lag " + i.toString();
     teams.add(Team(team));
-    for(int j = 0; j < 100; j++){
+    for(int j = 0; j < 90; j++){
       String game = "Motståndare " + j.toString();
       teams[i].addGame(Game(game,players));
     }
+    teams[i].addGame(Game("svenska bananböjarnas innebandyförening", players));
   }
+  teams.add(Team("svenska bananböjarnas innebandyförening"));
 }
 
 class Team{
