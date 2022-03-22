@@ -1,6 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'testStats.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:math';
+
 
 void main(){
   testStats();
@@ -15,6 +19,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Innebandy',
       theme: ThemeData(
+        scaffoldBackgroundColor: Colors.grey[700],
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.red,
+          //backgroundColor: Colors.blue,
+          //primary: Colors.red,
+          //surface: Colors.blue,
+        ),
       ),
       home: TeamPage(),
     );
@@ -32,13 +43,13 @@ class TeamPage extends StatefulWidget {
 
 class _TeamPageState extends State<TeamPage> {
 
-  TextStyle textStyle = const TextStyle(fontSize: 20, color: Colors.white);
+  TextStyle textStyle = const TextStyle(fontSize: 20, color: Colors.black);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Lag"),
+          title: const Text("Lag", style: TextStyle(color: Colors.black),),
         ),
         body: Column(
           children: [
@@ -62,14 +73,17 @@ class GamePage extends StatefulWidget{
 }
 
 class _GamePageState extends State<GamePage> {
-  TextStyle textStyle = const TextStyle(fontSize: 20, color: Colors.white);
+  TextStyle textStyle = const TextStyle(fontSize: 20, color: Colors.black);
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Matcher för ${widget.team}"),
+          title: Text("Matcher för ${widget.team}", style: TextStyle(color: Colors.black),),
+          iconTheme: const IconThemeData(
+            color: Colors.black, //change your color here
+          ),
         ),
         body: Column(
             children: [
@@ -93,18 +107,19 @@ class PlayerPage extends StatefulWidget {
 
 class _PlayerPageState extends State<PlayerPage> {
 
-  TextStyle textStyle = const TextStyle(fontSize: 20, color: Colors.white);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Spelare i matchen mot ${widget.game}"),
+          title: Text("Spelare i matchen mot ${widget.game}", style: TextStyle(color: Colors.black),),
+          iconTheme: const IconThemeData(
+            color: Colors.black, //change your color here
+          ),
         ),
         body: Column(
             children: [
               Flexible(
-                  child: ScrollPlayer(items: widget.players, textStyle: textStyle)
+                  child: ScrollPlayer(items: widget.players)
               )
             ]
         )
@@ -121,7 +136,9 @@ class StatsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          //title: Text("Statistik för spelare ${player.number}"),
+          iconTheme: const IconThemeData(
+            color: Colors.black, //change your color here
+          ),
         ),
         body: Column(
           children: [
@@ -142,15 +159,21 @@ class ScrollTeam extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
-      child: ListView.separated(
+      child: GridView.builder(
         shrinkWrap: true,
         padding: const EdgeInsets.all(8),
         itemCount: items.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: [MediaQuery.of(context).size.width~/400,1].reduce(max),
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          childAspectRatio: (7/1),
+        ),
         itemBuilder: (BuildContext context, int index) {
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
-              minimumSize: Size(20, MediaQuery.of(context).size.height/10),
-              maximumSize: Size(50, MediaQuery.of(context).size.height/10),
+              minimumSize: const Size(20, 20),
+              maximumSize: const Size(50, 50),
             ),
             onPressed: () {
               Navigator.push(
@@ -158,15 +181,31 @@ class ScrollTeam extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => GamePage(games: items[index].games, team: items[index].name)),
               );
             },
-            child: Center(
-              child: Text(
-                items[index].name,
-                style: textStyle,
-              ),
-            ),
+            child: Row(
+              children: [
+                const Image(
+                  image: AssetImage('Assets/silhouette2.png'),
+                  height: 25,
+                ),
+                const Image(
+                  image: AssetImage('Assets/silhouette2.png'),
+                  height: 35,
+                ),
+                const Image(
+                  image: AssetImage('Assets/silhouette2.png'),
+                  height: 25,
+                ),
+                Container(width: 20),
+                Flexible(
+                  child: Text(
+                    items[index].name,
+                    style: textStyle,
+                  ),
+                ),
+              ],
+            )
           );
         },
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
       ),
     );
   }
@@ -181,15 +220,21 @@ class ScrollGame extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
-      child: ListView.separated(
+      child: GridView.builder(
         shrinkWrap: true,
         padding: const EdgeInsets.all(8),
         itemCount: items.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: [MediaQuery.of(context).size.width~/400,1].reduce(max),
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          childAspectRatio: (7/1),
+        ),
         itemBuilder: (BuildContext context, int index) {
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
-              minimumSize: Size(20, MediaQuery.of(context).size.height/10),
-              maximumSize: Size(50, MediaQuery.of(context).size.height/10),
+              minimumSize: const Size(20, 20),
+              maximumSize: const Size(50, 50),
             ),
             onPressed: () {
               Navigator.push(
@@ -197,37 +242,57 @@ class ScrollGame extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => PlayerPage(players: items[index].players, game: items[index].name)),
               );
             },
-            child: Center(
-              child: Text(
-                items[index].name,
-                style: textStyle,
-              ),
-            ),
+            child: Row(
+              children: [
+                const Image(
+                  image: AssetImage('Assets/silhouette2.png'),
+                  height: 25,
+                ),
+                const Image(
+                  image: AssetImage('Assets/silhouette2.png'),
+                  height: 35,
+                ),
+                const Image(
+                  image: AssetImage('Assets/silhouette2.png'),
+                  height: 25,
+                ),
+                Container(width: 20),
+                Flexible(
+                  child: Text(
+                    items[index].name,
+                    style: textStyle,
+                  ),
+                ),
+              ],
+            )
           );
         },
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
       ),
     );
   }
 }
 class ScrollPlayer extends StatelessWidget {
   final List<Player> items;
-  final TextStyle textStyle;
-  const ScrollPlayer({Key? key, required this.items, required this.textStyle}) : super(key: key);
+  const ScrollPlayer({Key? key, required this.items}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
-      child: ListView.separated(
+      child: GridView.builder(
         shrinkWrap: true,
         padding: const EdgeInsets.all(8),
         itemCount: items.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: [MediaQuery.of(context).size.width~/150,1].reduce(max),
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+        ),
         itemBuilder: (BuildContext context, int index) {
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
-              minimumSize: Size(20, MediaQuery.of(context).size.height/10),
-              maximumSize: Size(50, MediaQuery.of(context).size.height/10),
+              minimumSize: const Size(20, 20),
+              //maximumSize: const Size(50, 50),
             ),
             onPressed: () {
               Navigator.push(
@@ -236,14 +301,48 @@ class ScrollPlayer extends StatelessWidget {
               );
             },
             child: Center(
-              child: Text(
-                items[index].number.toString(),
-                style: GoogleFonts.bebasNeue(textStyle: textStyle),
-              ),
+              child: Stack(
+                children: [
+                  LayoutBuilder(
+                      builder: (BuildContext context, BoxConstraints constraints) {
+                        return SizedBox(
+                          // TODO: if size of page increased when here the picture goes yeeeet
+                          height: constraints.maxHeight,
+                          width: constraints.maxWidth,
+                          child: const Center(
+                            child: Image(
+                              image: AssetImage('Assets/silhouette2.png'),
+                              //height: constraints.maxWidth,
+                            ),
+                          ),
+                        );
+                      }
+                  ),
+                  Center(
+                    child: LayoutBuilder(
+                      builder: (BuildContext context, BoxConstraints constraints) {
+                        return Container(
+                          alignment: Alignment.bottomCenter,
+                          padding: EdgeInsets.all(constraints.maxWidth/10),
+                          child: Text(
+                            items[index].number.toString(),
+                            style: GoogleFonts.bebasNeue(
+                              textStyle: TextStyle(
+                                fontSize: (constraints.maxWidth)/3,
+                                color: Colors.white
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              )
+
             ),
           );
         },
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
       ),
     );
   }
@@ -251,15 +350,47 @@ class ScrollPlayer extends StatelessWidget {
 
 class Stats extends StatelessWidget {
   final Player player;
-  const Stats({Key? key, required this.player}) : super(key: key);
+  Stats({Key? key, required this.player}) : super(key: key);
+
+  final BoxDecoration boxDec = BoxDecoration(
+    borderRadius: BorderRadius.circular(8),
+    color: Colors.red,
+  );
+
 
   @override
   Widget build(BuildContext context) {
-    double pad = 8;
-    double boxSize = MediaQuery.of(context).size.width/2-pad;
+    final int shiftMin = player.shiftTime~/60;
+    final int shiftSec = player.shiftTime-shiftMin*60;
+    final int avShift = player.shiftTime~/player.shifts;
+    String averageShift;
+    String totalShift;
+    if(shiftMin < 1){
+      totalShift = "$shiftSec sekunder";
+    } else{
+      if(shiftSec < 10){
+        totalShift = "$shiftMin:0$shiftSec";
+      } else{
+        totalShift = "$shiftMin:$shiftSec";
+      }
+    }
+    if(avShift>=60){
+      int min = avShift~/60;
+      int sec = avShift-min*60;
+      if(sec < 10){
+        averageShift = "$min:0$sec";
+      }else{
+        averageShift = "$min:$sec";
+      }
+    } else{
+      averageShift = "$avShift sekunder";
+    }
+    const double pad = 8;
+    final double boxSize = MediaQuery.of(context).size.width/2-pad;
     return SizedBox(
       child: ListView(
-        padding: EdgeInsets.all(pad),
+        padding: const EdgeInsets.all(pad),
+        shrinkWrap: true,
         children: <Widget>[
           Row(
             children: [
@@ -286,20 +417,70 @@ class Stats extends StatelessWidget {
             ],
           ),
           Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: Colors.green,
-            ),
+            decoration: boxDec,
             height: boxSize/4,
             width: boxSize*2,
             child: Center(
-              child: Text(
-                "Distans ${player.distance} meter"
+              child: Flexible(
+                child: Text(
+                  "Distans ${player.distance} meter",
+                   style: TextStyle(
+                     fontSize: boxSize/10,
+                  ),
+                ),
               ),
-            )
-          )
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            decoration: boxDec,
+            height: boxSize/4,
+            width: boxSize*2,
+            child: Center(
+              child: Flexible(
+                child: Text(
+                  "Total bytestid $totalShift",
+                  style: TextStyle(
+                    fontSize: boxSize/10
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            decoration: boxDec,
+            height: boxSize/4,
+            width: boxSize*2,
+            child: Center(
+              child: Flexible(
+                child: Text(
+                  "Genomsnittlig bytestid $averageShift",
+                  style: TextStyle(
+                    fontSize: boxSize/10
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            decoration: boxDec,
+            height: boxSize/4,
+            width: boxSize*2,
+            child: Center(
+              child: Flexible(
+                child: Text(
+                  "Antal byten ${player.shifts}",
+                  style: TextStyle(
+                    fontSize: boxSize/10
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
-      )
+      ),
     );
   }
 }

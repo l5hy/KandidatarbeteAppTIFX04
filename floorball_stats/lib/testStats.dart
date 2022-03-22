@@ -1,5 +1,6 @@
 
 
+
 //TODO: Lag från fil vid senare tillfälle
 
 
@@ -7,19 +8,21 @@ List<Team> teams = [];
 
 void testStats() {
 
-  List<Player> players = [Player(0, 0)];
+  List<Player> players = [Player(0, 0, 0, 1)];
+  for(int i = 1; i < 100; i++){
+    players.add(Player(i, i, 60*i, i)); //number, distance, total shifttime and number of shifts (15 will be the average shifttime in this case)
+  }
 
-  List<Game> games = [Game("Motståndare", players)];
-
-  for(int i = 0; i < 3; i++){
+  for(int i = 0; i < 90; i++){
     String team = "Lag " + i.toString();
     teams.add(Team(team));
-    for(int j = 0; j < 3; j++){
+    for(int j = 0; j < 90; j++){
       String game = "Motståndare " + j.toString();
-      Player player = Player(j, 0);
-      teams[i].addGame(Game(game,[player]));
+      teams[i].addGame(Game(game,players));
     }
+    teams[i].addGame(Game("svenska bananböjarnas innebandyförening", players));
   }
+  teams.add(Team("svenska bananböjarnas innebandyförening"));
 }
 
 class Team{
@@ -48,6 +51,8 @@ class Game{
 class Player{
   late int number;
   late int distance;
+  late int shiftTime; //Total shifttime in seconds
+  late int shifts; //Total amount of shifts
 
-  Player(this.number, this.distance);
+  Player(this.number, this.distance, this.shiftTime, this.shifts);
 }
