@@ -1,16 +1,15 @@
 
-
-
 //TODO: Lag från fil vid senare tillfälle
 
+import 'package:flutter/cupertino.dart';
 
 List<Team> teams = [];
 
 void testStats() {
 
-  List<Player> players = [Player(0, 0, 0, 1)];
+  List<Player> players = [Player(0, 0, 0, 1, const AssetImage('Assets/silhouette2.png'))];
   for(int i = 1; i < 100; i++){
-    players.add(Player(i, i, 15*i, i)); //number, distance, total shifttime and number of shifts (15 will be the average shifttime in this case)
+    players.add(Player(i, i, 15*i, i, const AssetImage('Assets/silhouette2.png'))); //number, distance, total shifttime and number of shifts (15 will be the average shifttime in this case)
   }
 
   for(int i = 0; i < 90; i++){
@@ -53,6 +52,7 @@ class Player{
   late int distance;
   late int shiftTime; //Total shifttime in seconds
   late int shifts; //Total amount of shifts
+  late ImageProvider image;
 
-  Player(this.number, this.distance, this.shiftTime, this.shifts);
+  Player(this.number, this.distance, this.shiftTime, this.shifts, this.image);
 }
