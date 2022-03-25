@@ -14,7 +14,7 @@ void main(){
   testStats();
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-    setWindowTitle('Flutter Demo');
+    // setWindowTitle('Flutter Demo');
     setWindowMinSize(const Size(600, 500));
     setWindowMaxSize(Size.infinite);
   }
@@ -462,6 +462,15 @@ class Stats extends StatelessWidget {
                   style: TextStyle(
                     fontSize: boxSize/10
                   ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 50),
+          Container(
+            //height: ,
+            child: Center(
+              child: Image(
+                image: player.image,
               ),
             ),
           ),
