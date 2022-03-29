@@ -14,7 +14,6 @@ void main(){
   testStats();
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-    // setWindowTitle('Flutter Demo');
     setWindowMinSize(const Size(600, 500));
     setWindowMaxSize(Size.infinite);
   }
@@ -50,8 +49,6 @@ class TeamPage extends StatefulWidget {
 
 class _TeamPageState extends State<TeamPage> {
 
-  TextStyle textStyle = const TextStyle(fontSize: 20, color: Colors.black);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +58,7 @@ class _TeamPageState extends State<TeamPage> {
       body: Column(
         children: [
           Flexible(
-            child: ScrollTeam(items: teams, textStyle: textStyle),
+            child: ScrollTeam(items: teams),
           ),
         ]
       ),
@@ -95,7 +92,7 @@ class _GamePageState extends State<GamePage> {
         body: Column(
             children: [
               Flexible(
-                  child: ScrollGame(items: widget.games,textStyle: textStyle)
+                  child: ScrollGame(items: widget.games)
               )
             ]
         )
@@ -124,11 +121,11 @@ class _PlayerPageState extends State<PlayerPage> {
           ),
         ),
         body: Column(
-            children: [
-              Flexible(
-                  child: ScrollPlayer(items: widget.players)
-              )
-            ]
+          children: [
+            Flexible(
+              child: ScrollPlayer(items: widget.players)
+            )
+          ]
         )
     );
   }
@@ -159,11 +156,13 @@ class StatsPage extends StatelessWidget {
 
 class ScrollTeam extends StatelessWidget {
   final List<Team> items;
-  final TextStyle textStyle;
-  const ScrollTeam({Key? key, required this.items, required this.textStyle}) : super(key: key);
+  const ScrollTeam({Key? key, required this.items}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if(items.isEmpty){
+      return SizedBox(height: MediaQuery.of(context).size.height);
+    }
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       child: GridView.builder(
@@ -200,13 +199,17 @@ class ScrollTeam extends StatelessWidget {
                 ),
                 Container(width: 20),
                 Flexible(
-                  child: Text(
-                    items[index].name,
-                    style: textStyle,
+                  child: LayoutBuilder(
+                    builder: (BuildContext context, BoxConstraints constraints) {
+                      return Text(
+                        items[index].name,
+                        style: TextStyle(fontSize: constraints.maxHeight/3, color: Colors.black),
+                      );
+                    },
                   ),
                 ),
               ],
-            )
+            ),
           );
         },
       ),
@@ -216,11 +219,13 @@ class ScrollTeam extends StatelessWidget {
 
 class ScrollGame extends StatelessWidget {
   final List<Game> items;
-  final TextStyle textStyle;
-  const ScrollGame({Key? key, required this.items, required this.textStyle}) : super(key: key);
+  const ScrollGame({Key? key, required this.items}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if(items.isEmpty){
+      return SizedBox(height: MediaQuery.of(context).size.height);
+    }
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       child: GridView.builder(
@@ -257,10 +262,14 @@ class ScrollGame extends StatelessWidget {
                 ),
                 Container(width: 20),
                 Flexible(
-                  child: Text(
-                    items[index].name,
-                    style: textStyle,
-                  ),
+                  child: LayoutBuilder(
+                    builder: (BuildContext context, BoxConstraints constraints) {
+                      return Text(
+                        items[index].name,
+                        style: TextStyle(fontSize: constraints.maxHeight/3, color: Colors.black),
+                      );
+                    },
+                  )
                 ),
               ],
             )
@@ -276,6 +285,9 @@ class ScrollPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if(items.isEmpty){
+      return SizedBox(height: MediaQuery.of(context).size.height);
+    }
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       child: GridView.builder(
