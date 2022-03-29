@@ -7,9 +7,9 @@ List<Team> teams = [];
 
 void testStats() {
 
-  List<Player> players = [Player(0, 0, 0, 1, const AssetImage('Assets/silhouette2.png'))];
+  List<Player> players = [Player(17, 4896, 1135, 26, const AssetImage('Assets/heatmap.jpg'))];
   for(int i = 1; i < 100; i++){
-    players.add(Player(i, i, 15*i, i, const AssetImage('Assets/silhouette2.png'))); //number, distance, total shifttime and number of shifts (15 will be the average shifttime in this case)
+    players.add(Player(i, i, 15*i, i, const AssetImage('Assets/heatmap.jpg'))); //number, distance, total shifttime and number of shifts (15 will be the average shifttime in this case)
   }
 
   for(int i = 0; i < 90; i++){

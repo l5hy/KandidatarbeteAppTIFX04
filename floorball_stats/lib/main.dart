@@ -478,12 +478,10 @@ class Stats extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 50),
-          Container(
-            //height: ,
-            child: Center(
-              child: Image(
-                image: player.image,
-              ),
+          Center(
+            child: Image(
+              image: player.image,
+              width: MediaQuery.of(context).size.width-pad*2,
             ),
           ),
         ],

@@ -67,6 +67,7 @@ flutter:
   assets:
     - Assets/silhouette1.png
     - Assets/silhouette2.png
+    - Assets/heatmap.jpg
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
