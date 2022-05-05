@@ -12,11 +12,11 @@ import 'package:window_size/window_size.dart';
 
 void main(){
   testStats();
-  WidgetsFlutterBinding.ensureInitialized();
+/*  WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     setWindowMinSize(const Size(600, 500));
     setWindowMaxSize(Size.infinite);
-  }
+  }*/
   runApp(MyApp());
 }
 
